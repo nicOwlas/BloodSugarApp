@@ -1,3 +1,2 @@
-export { HistoryScreen } from "./HistoryScreen";
-export { LogScreen } from "./LogScreen";
+export { NewLogScreen } from "./NewLogScreen";
 export { SettingsScreen } from "./SettingsScreen";

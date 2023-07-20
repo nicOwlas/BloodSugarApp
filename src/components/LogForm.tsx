@@ -1,13 +1,25 @@
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
 import { Button, TextInput, View } from "react-native";
+import { RootStackParamList } from "../types";
 import { saveLog } from "../utils/storage";
 
+type LogFormNavigationProp = StackNavigationProp<RootStackParamList, "Log">;
+
 export function LogForm() {
+  const navigation = useNavigation<LogFormNavigationProp>();
   const [value, setValue] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     await saveLog(value);
-    setValue("");
+    setIsSubmitting(false);
+    navigation.navigate("TabNavigator", {
+      screen: "Home",
+      params: { newLog: value },
+    });
   };
 
   return (
@@ -18,7 +30,10 @@ export function LogForm() {
         onChangeText={setValue}
         keyboardType="numeric"
       />
-      <Button title="Submit" onPress={handleSubmit} />
+      <Button
+        title={isSubmitting ? "Saving..." : "Submit"}
+        onPress={handleSubmit}
+      />
     </View>
   );
 }
